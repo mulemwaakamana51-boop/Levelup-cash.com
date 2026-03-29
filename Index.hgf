@@ -1,0 +1,54 @@
+// ===================== server.js ===================== const express = require('express'); const fs = require('fs'); const bodyParser = require('body-parser'); const path = require('path'); const app = express(); const PORT = process.env.PORT || 3000;
+
+app.use(express.static('public')); app.use(bodyParser.json());
+
+// Load data.json const DATA_FILE = path.join(__dirname, 'data.json'); let rawData = fs.readFileSync(DATA_FILE); let data = JSON.parse(rawData);
+
+// Login app.post('/login', (req, res) => { const { username, password } = req.body; const user = data.users.find(u => u.username === username && u.password === password); if(user) res.json({ success: true }); else res.json({ success: false }); });
+
+// Add Post app.post('/addPost', (req, res) => { const { title, content } = req.body; data.posts.push({ title, content }); fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2)); res.json({ success: true }); });
+
+// Get Posts app.get('/posts', (req, res) => { res.json(data.posts); });
+
+app.listen(PORT, () => console.log(Server running on port ${PORT}));
+
+// ===================== package.json ===================== { "name": "levelup-cash", "version": "1.0.0", "main": "server.js", "scripts": { "start": "node server.js" }, "dependencies": { "express": "^4.18.2", "body-parser": "^1.20.2" } }
+
+// ===================== public/index.html =====================
+
+<!DOCTYPE html><html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>LevelUp Cash</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>LEVELUP CASH</h1>
+  <p>Play Smart. Earn More.</p>
+</header>
+<div class="container" id="loginPage">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="error" class="error"></p>
+</div>
+<div class="container hidden" id="dashboard">
+  <h2>Welcome to your website 🚀</h2>
+  <div class="card">
+    <h3>Create a Post</h3>
+    <input type="text" id="postTitle" placeholder="Post Title">
+    <input type="text" id="postContent" placeholder="Post Content">
+    <button onclick="addPost()">Post</button>
+  </div>
+  <div class="card">
+    <h3>Your Posts</h3>
+    <div id="posts"></div>
+  </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>// ===================== public/style.css ===================== body { margin:0; font-family: Arial, sans-serif; background: #0a0
+  
