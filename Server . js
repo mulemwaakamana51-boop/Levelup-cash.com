@@ -1,0 +1,31 @@
+const express = require('express');
+const fs = require('fs');
+const bodyParser = require('body-parser');
+const path = require('path');
+const app = express();
+const PORT = process.env.PORT || 3000;
+
+app.use(express.static('public'));
+app.use(bodyParser.json());
+
+const DATA_FILE = path.join(__dirname, 'data.json');
+let data = JSON.parse(fs.readFileSync(DATA_FILE));
+
+app.post('/login', (req, res) => {
+  const { username, password } = req.body;
+  const user = data.users.find(u => u.username === username && u.password === password);
+  res.json({ success: !!user });
+});
+
+app.post('/addPost', (req, res) => {
+  const { title, content } = req.body;
+  data.posts.push({ title, content });
+  fs.writeFileSync(DATA_FILE, JSON.stringify(data, null, 2));
+  res.json({ success: true });
+});
+
+app.get('/posts', (req, res) => {
+  res.json(data.posts);
+});
+
+app.listen(PORT, () => console.log('Server running'));
