@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>LevelUp Cash</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header>
+  <h1>LEVELUP CASH</h1>
+  <p>Play Smart. Earn More.</p>
+</header>
+
+<div class="container" id="loginPage">
+  <h2>Login</h2>
+  <input type="text" id="username" placeholder="Username">
+  <input type="password" id="password" placeholder="Password">
+  <button onclick="login()">Login</button>
+  <p id="error"></p>
+</div>
+
+<div class="container hidden" id="dashboard">
+  <h2>Welcome 🚀</h2>
+
+  <input type="text" id="postTitle" placeholder="Post title">
+  <input type="text" id="postContent" placeholder="Post content">
+  <button onclick="addPost()">Post</button>
+
+  <div id="posts"></div>
+</div>
+
+<script src="script.js"></script>
+
+</body>
+</html>
